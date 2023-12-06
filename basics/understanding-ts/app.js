@@ -1,13 +1,17 @@
-var combine = function (input1, input2) {
-    var result;
-    if (typeof input1 === "number" && typeof input2 === "number") {
-        result = input1 + input2;
-    }
-    else {
-        result = input1.toString() + input2.toString();
-    }
-    return result;
+var add = function (n1, n2) {
+    return n1 + n2;
 };
-var combinedAges = combine(30, 26);
-console.log(combinedAges);
-var combinedNames = combine("Sid", "Kristen");
+var printResult = function (num) {
+    console.log("Result: ", num);
+};
+printResult(add(5, 12));
+var combineValues;
+combineValues = add;
+console.log(combineValues(8, 8));
+var addAndHandle = function (n1, n2, cb) {
+    var result = n1 + n2;
+    cb(result);
+};
+addAndHandle(10, 20, function (result) {
+    console.log(result);
+});

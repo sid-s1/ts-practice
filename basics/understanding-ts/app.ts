@@ -1,18 +1,15 @@
-const combine = (input1: number | string, input2: number | string, resultConversion: "as-number" | "as-text") => {
-    let result;
-    if (typeof input1 === "number" && typeof input2 === "number" || resultConversion === "as-number") {
-        result = +input1 + +input2;
-    }
-    else {
-        result = input1.toString() + input2.toString();
-    }
+let userInput: unknown;
+let userName: string;
+
+userInput = 5;
+userInput = "Max";
+
+if (typeof userInput === "string") {
+    userName = userInput;
+}
+
+const generateError = (message: string, code: number) => {
+    throw { errorMessage: message, errorCode: code};
 };
 
-const combinedAges = combine(30,26, "as-number");
-console.log(combinedAges);
-
-const combinedStringAges = combine(30,26, "as-number");
-console.log(combinedStringAges);
-
-const combinedNames = combine("Sid", "Kristen", "as-text");
-console.log(combinedNames);
+generateError("An error occurred", 500);
