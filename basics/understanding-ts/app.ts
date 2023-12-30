@@ -87,3 +87,21 @@ console.log(textStorage.getItems());
 // BUT, if you try to create a new data storage object with object type, you will encounter an error when you try to remove a certain item - because objects are not a primitive data type, and when JS will look for their reference to try and remove them from the array, it won't find them and it will just remove the last element from the array instead
 // So, limit it a bit more to only primitive data types by using class DataStorage <T extends number | string | boolean>
 
+
+// Partial Type - A utility type in TS
+interface CourseGoal {
+    title: string;
+    description: string;
+    completeUntil: Date;
+}
+const createCourseGoal = (title: string, description: string, date: Date) : CourseGoal => {
+    let courseGoal : Partial<CourseGoal> = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = date;
+    return courseGoal as CourseGoal;
+};
+
+// Another utility type in TS
+const names : Readonly<string[]> = ["Max","Sports"];
+

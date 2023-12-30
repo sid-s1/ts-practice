@@ -74,5 +74,12 @@ textStorage.addItem("Max");
 textStorage.addItem("Manu");
 textStorage.removeItem("Max");
 console.log(textStorage.getItems());
-// BUT, if you try to create a new data storage object with object type, you will encounter an error when you try to remove a certain item - because objects are not a primitive data type, and when JS will look for their reference to try and remove them from the array, it won't find them and it will just remove the last element from the array instead
-// So, limit it a bit more to only primitive data types by using class DataStorage <T extends number | string | boolean>
+var createCourseGoal = function (title, description, date) {
+    var courseGoal = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = date;
+    return courseGoal;
+};
+// Another utility type in TS
+var names = ["Max", "Sports"];
