@@ -27,6 +27,13 @@ const addTwoUnionTypes = (a: Combinables, b: Combinables) => {
     return a + b;
 };
 
+// But the issue with the above is that when you pass two strings into that function and expect to get back a string and try to perform string operations like 'split' on it, it won't work - because TS will keep expecting the result to be a 'Combinables' type and not a string type - so you will need function overloading statement like below 
+
+// const addTwoUnionTypes = (a: number, b: number) : number;
+// const addTwoUnionTypes = (a: string, b: string) : string;
+// const addTwoUnionTypes = (a: number, b: string) : string;
+// const addTwoUnionTypes = (a: string, b: number) : string;
+
 type UnknownEmployee = Employee | Admin;
 
 const printEmployeeInformation = (emp: UnknownEmployee) => {
