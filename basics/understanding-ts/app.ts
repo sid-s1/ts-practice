@@ -108,19 +108,19 @@ const moveAnimal = (animal: Animal) => {
 
 moveAnimal({type: 'bird',flyingSpeed: 10});
 
-const paragraph = document.getElementById('message-output'); // TS only recognizes this as an HTML Element and not as a paragraph, as it would if queryselector was used 
-const userInputElement = document.getElementById('user-input');
-// userInputElement.value = "Hi there"; - cant do this because 1) object could be possibly null, 2) because it is being as a generic HTML element type which might not have that property "value"
+// const paragraph = document.getElementById('message-output'); // TS only recognizes this as an HTML Element and not as a paragraph, as it would if queryselector was used 
+// const userInputElement = document.getElementById('user-input');
+// // userInputElement.value = "Hi there"; - cant do this because 1) object could be possibly null, 2) because it is being as a generic HTML element type which might not have that property "value"
 
-// instead we do the below -
-// Option 1 -
-const userInputElement2 = <HTMLInputElement>document.getElementById('user-input')!;
-userInputElement2.value = "Hi there!"; // works - exclamation mark at the end confirms that it will never be null - only use when as a developer you know FOR SURE that this will not be null
+// // instead we do the below -
+// // Option 1 -
+// const userInputElement2 = <HTMLInputElement>document.getElementById('user-input')!;
+// userInputElement2.value = "Hi there!"; // works - exclamation mark at the end confirms that it will never be null - only use when as a developer you know FOR SURE that this will not be null
 
-// or we do the below -
-// Option 2 -
-const userInputElement3 = document.getElementById('user-input')! as HTMLInputElement;
-userInputElement3.value = "Hi there!"; // works and avoids the hotchpotch that can happen when using React with TS as React also uses angle brackets at the start but that's only for React's own parsing
+// // or we do the below -
+// // Option 2 -
+// const userInputElement3 = document.getElementById('user-input')! as HTMLInputElement;
+// userInputElement3.value = "Hi there!"; // works and avoids the hotchpotch that can happen when using React with TS as React also uses angle brackets at the start but that's only for React's own parsing
 
 // If you are not certain that it will not be null, use the below approach -
 // Option 3 -
@@ -128,3 +128,16 @@ const userInputElement4 = document.getElementById('user-input');
 if (userInputElement4) {
     (userInputElement4 as HTMLInputElement).value = "Hi there!"; // works
 }
+
+// Optional chaining
+const fetchedUserData = {
+    id: "u1",
+    name: "Max",
+    job: {title: "CEO", description: "My own company"}
+};
+console.log(fetchedUserData?.job?.title); // '?' checks if that thing exists first, before going ahead and helps prevent a runtime error
+
+// Nullish Coalescing
+const userInput = "";
+const storedData = userInput ?? "DEFAULT"; // '??' helps in checking if the data is null or undefined - thankfully ONLY checks for null or undefined, and NOT empty string or 0
+console.log(storedData);
