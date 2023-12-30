@@ -1,3 +1,13 @@
+// Whole idea behind generic types (functions or classes) = Flexible yet strongly typed
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 // const names = ["Max","Manuel"];
 // // OR
 // const names2 : Array<string> = []; // same as writing string[]
@@ -43,3 +53,26 @@ var extractAndConvert = function (obj, key) {
     return "Value: " + obj[key];
 };
 console.log(extractAndConvert({ name: "Max" }, "name")); // if you try to access 'age' even though it's not there in the obj; TS will throw an error
+// Generic Classes
+var DataStorage = /** @class */ (function () {
+    function DataStorage() {
+        this.data = [];
+    }
+    DataStorage.prototype.addItem = function (item) {
+        this.data.push(item);
+    };
+    DataStorage.prototype.removeItem = function (item) {
+        this.data.splice(this.data.indexOf(item), 1);
+    };
+    DataStorage.prototype.getItems = function () {
+        return __spreadArray([], this.data, true);
+    };
+    return DataStorage;
+}());
+var textStorage = new DataStorage();
+textStorage.addItem("Max");
+textStorage.addItem("Manu");
+textStorage.removeItem("Max");
+console.log(textStorage.getItems());
+// BUT, if you try to create a new data storage object with object type, you will encounter an error when you try to remove a certain item - because objects are not a primitive data type, and when JS will look for their reference to try and remove them from the array, it won't find them and it will just remove the last element from the array instead
+// So, limit it a bit more to only primitive data types by using class DataStorage <T extends number | string | boolean>

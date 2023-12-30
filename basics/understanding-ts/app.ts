@@ -1,3 +1,5 @@
+// Whole idea behind generic types (functions or classes) = Flexible yet strongly typed
+
 // const names = ["Max","Manuel"];
 // // OR
 // const names2 : Array<string> = []; // same as writing string[]
@@ -58,4 +60,30 @@ const extractAndConvert = <T extends object, U extends keyof T> (obj: T, key: U)
     return "Value: " + obj[key];
 };
 console.log(extractAndConvert({name: "Max"},"name")); // if you try to access 'age' even though it's not there in the obj; TS will throw an error
+
+// Generic Classes
+class DataStorage<T> {
+    private data: T[] = [];
+
+    addItem(item: T) {
+        this.data.push(item);
+    }
+
+    removeItem(item: T) {
+        this.data.splice(this.data.indexOf(item),1);
+    }
+
+    getItems() {
+        return [...this.data];
+    }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem("Max");
+textStorage.addItem("Manu");
+textStorage.removeItem("Max");
+console.log(textStorage.getItems());
+
+// BUT, if you try to create a new data storage object with object type, you will encounter an error when you try to remove a certain item - because objects are not a primitive data type, and when JS will look for their reference to try and remove them from the array, it won't find them and it will just remove the last element from the array instead
+// So, limit it a bit more to only primitive data types by using class DataStorage <T extends number | string | boolean>
 
