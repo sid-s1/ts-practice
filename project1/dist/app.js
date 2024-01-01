@@ -17,6 +17,25 @@ function autobind(_target, _methodName, descriptor) {
     };
     return adjDescriptor;
 }
+function validate(validatableInput) {
+    let isValid = true;
+    if (validatableInput.required) {
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+    }
+    if (validatableInput.minLength != null && typeof validatableInput.value === "string") {
+        isValid = isValid && validatableInput.value.length >= validatableInput.minLength;
+    }
+    if (validatableInput.maxLength != null && typeof validatableInput.value === "string") {
+        isValid = isValid && validatableInput.value.length <= validatableInput.maxLength;
+    }
+    if (validatableInput.min != null && typeof validatableInput.value === "number") {
+        isValid = isValid && validatableInput.value >= validatableInput.min;
+    }
+    if (validatableInput.max != null && typeof validatableInput.value === "number") {
+        isValid = isValid && validatableInput.value <= validatableInput.max;
+    }
+    return isValid;
+}
 class ProjectInput {
     // selection and rough setup in the constructor, and then the insertion or fine tuning in separate methods
     constructor() {
@@ -40,8 +59,23 @@ class ProjectInput {
         const enteredTitle = this.titleInputElement.value;
         const enteredDescription = this.descriptionInputElement.value;
         const enteredPeople = this.peopleInputElement.value;
-        if (enteredTitle.trim().length === 0 || enteredDescription.trim().length === 0 || enteredPeople.trim().length === 0) {
-            alert("Invalid inpit, please try again");
+        const titleValidatable = {
+            value: enteredTitle,
+            required: true
+        };
+        const desciptionValidatable = {
+            value: enteredDescription,
+            required: true,
+            minLength: 5
+        };
+        const peopleValidatable = {
+            value: enteredPeople,
+            required: true,
+            min: 2,
+            max: 5
+        };
+        if (!validate(titleValidatable) || !validate(desciptionValidatable) || !validate(peopleValidatable)) {
+            alert("Invalid input, please try again");
             return;
         }
         else {
