@@ -1,85 +1,104 @@
-// Whole idea behind generic types (functions or classes) = Flexible yet strongly typed
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
+// // Decorators for classes - simply a function that you apply to a class in a certain way
+// const Logger = (logString:string) => { // example of a decorator function
+//     return function(constructor: Function) {
+//         console.log(logString);
+//         console.log(constructor);
+//     }
+// };
+var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+    var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+    var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+    var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+    var _, done = false;
+    for (var i = decorators.length - 1; i >= 0; i--) {
+        var context = {};
+        for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+        for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+        context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+        var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+        if (kind === "accessor") {
+            if (result === void 0) continue;
+            if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+            if (_ = accept(result.get)) descriptor.get = _;
+            if (_ = accept(result.set)) descriptor.set = _;
+            if (_ = accept(result.init)) initializers.unshift(_);
+        }
+        else if (_ = accept(result)) {
+            if (kind === "field") initializers.unshift(_);
+            else descriptor[key] = _;
         }
     }
-    return to.concat(ar || Array.prototype.slice.call(from));
+    if (target) Object.defineProperty(target, contextIn.name, descriptor);
+    done = true;
 };
-// const names = ["Max","Manuel"];
-// // OR
-// const names2 : Array<string> = []; // same as writing string[]
-// const promise: Promise<string> = new Promise((resolve,reject) => {
-//     setTimeout(() => {
-//         resolve("This is done");
-//     }, 2000);
-// });
-// promise.then(data => {
-//     // But we cannot perform string operations here because TS is not able to check whether or not that is doable - IF Promise<string> is not done in Line 4
-// });
-var merge = function (objA, objB) {
-    return Object.assign(objA, objB);
-};
-console.log(merge({ name: "Max" }, { age: 30 }));
-// But if we save the result of that merge operation to another object, like so -
-var mergedObj = merge({ name: "Max" }, { age: 30 });
-// we will not be able to access the name and age properties of that
-// that's why we must make it a generic function
-var merge2 = function (objA, objB) {
-    return Object.assign(objA, objB);
-};
-var mergedObj2 = merge2({ name: "Max" }, { age: 30 });
-// This way, TS is able to tell that we are not dealing with the intersection of two random objects, but that we are dealing with the intersection of two objects that will have different structures, so it looks further in to what those structures are - mergedObj2.name or .age will work now
-// We won't want to be too restrictive by saying objA: {name: string} because what if we want to have additional key-value pairs in the object
-// But what if for the second object, we were to pass a number instead of an object? TS will just fail silently in that case. It will allow you to access name property still, but will throw an error if you try to access the age prop
-// You need to restrict the type for the generic type by using 'extends' like so -
-var merge3 = function (objA, objB) {
-    return Object.assign(objA, objB);
-};
-var countAndDescribe = function (element) {
-    var descriptionText = "Got no value";
-    if (element.length === 1) {
-        descriptionText = "Got 1 element";
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
     }
-    else if (element.length > 1) {
-        descriptionText = "Got " + element.length + " elements.";
-    }
-    return [element, descriptionText];
+    return useValue ? value : void 0;
 };
-console.log(countAndDescribe("Hi there!"));
-var extractAndConvert = function (obj, key) {
-    return "Value: " + obj[key];
-};
-console.log(extractAndConvert({ name: "Max" }, "name")); // if you try to access 'age' even though it's not there in the obj; TS will throw an error
-// Generic Classes
-var DataStorage = /** @class */ (function () {
-    function DataStorage() {
-        this.data = [];
-    }
-    DataStorage.prototype.addItem = function (item) {
-        this.data.push(item);
-    };
-    DataStorage.prototype.removeItem = function (item) {
-        this.data.splice(this.data.indexOf(item), 1);
-    };
-    DataStorage.prototype.getItems = function () {
-        return __spreadArray([], this.data, true);
-    };
-    return DataStorage;
-}());
-var textStorage = new DataStorage();
-textStorage.addItem("Max");
-textStorage.addItem("Manu");
-textStorage.removeItem("Max");
-console.log(textStorage.getItems());
-var createCourseGoal = function (title, description, date) {
-    var courseGoal = {};
-    courseGoal.title = title;
-    courseGoal.description = description;
-    courseGoal.completeUntil = date;
-    return courseGoal;
-};
-// Another utility type in TS
-var names = ["Max", "Sports"];
+// const WithTemplate = (template: string, hookId: string) => {
+//     return function(_: Function) {
+//         console.log("Rendering template");
+//         const hookEl = document.getElementById(hookId);
+//         if (hookEl) {
+//             hookEl.innerHTML = template;
+//         }
+//     }
+// };
+// // "@" special identifier that TS recognizes and the thing directly after the "@" symbol should point at a function (NOT execute it) which is the decorator
+// // You will see the decorator output even if the class is not instantiated; decorator function runs when the compiler finds the class definition
+// //  bottom most decorator gets executed first, but the creation of the decorator functions happens in the order they are written (Logger first in this case)
+// @Logger("LOGGING - PERSON")
+// @WithTemplate("<h1>My Person</h1>","app")
+// class PersonDecorators {
+//     name = "Max";
+//     constructor() {
+//         console.log("Creating person object...");
+//     }
+// }
+// const pers = new PersonDecorators();
+// console.log(pers);
+// -----------
+function Log(target, propertyName) {
+    console.log("Property decorator!");
+    console.log("Target  > ".concat(target, " <"), "Prop name > ".concat(propertyName, "<"));
+}
+var Product = function () {
+    var _a;
+    var _instanceExtraInitializers = [];
+    var _title_decorators;
+    var _title_initializers = [];
+    return _a = /** @class */ (function () {
+            function Product(t, p) {
+                this.title = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _title_initializers, void 0));
+                this.title = t;
+                this._price = p;
+            }
+            Object.defineProperty(Product.prototype, "price", {
+                set: function (val) {
+                    if (val > 0) {
+                        this._price = val;
+                    }
+                    else {
+                        throw new Error("Invalid price - should be positive");
+                    }
+                },
+                enumerable: false,
+                configurable: true
+            });
+            Product.prototype.getPriceWithTax = function (tax) {
+                return this._price * (1 + tax);
+            };
+            return Product;
+        }()),
+        (function () {
+            var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            _title_decorators = [Log];
+            __esDecorate(null, null, _title_decorators, { kind: "field", name: "title", static: false, private: false, access: { has: function (obj) { return "title" in obj; }, get: function (obj) { return obj.title; }, set: function (obj, value) { obj.title = value; } }, metadata: _metadata }, _title_initializers, _instanceExtraInitializers);
+            if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+        })(),
+        _a;
+}();
