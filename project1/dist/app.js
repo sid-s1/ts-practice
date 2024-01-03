@@ -129,25 +129,21 @@ class ProjectList extends Component {
     }
 }
 // Project input class
-class ProjectInput {
+class ProjectInput extends Component {
     // selection and rough setup in the constructor, and then the insertion or fine tuning in separate methods
     constructor() {
-        this.templateElement = document.getElementById("project-input");
-        this.hostElement = document.getElementById("app");
+        super("project-input", "app", true, "user-input");
         // Because as soon as this class is instantiated, we want to create our form, we will do it right here in the constructor
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = importedNode.firstElementChild;
-        this.element.id = "user-input";
-        // before we attach everything, we want to get access to the different inputs in that element/form; and we want to store them as properties in the class
         this.titleInputElement = this.element.querySelector("#title");
         this.descriptionInputElement = this.element.querySelector("#description");
         this.peopleInputElement = this.element.querySelector("#people");
+        // before we attach everything, we want to get access to the different inputs in that element/form; and we want to store them as properties in the class
         this.configure();
-        this.attach();
     }
-    attach() {
-        this.hostElement.insertAdjacentElement("afterbegin", this.element);
+    configure() {
+        this.element.addEventListener("submit", this.submitHandler);
     }
+    renderContent() { }
     gatherUserInput() {
         const enteredTitle = this.titleInputElement.value;
         const enteredDescription = this.descriptionInputElement.value;
@@ -189,9 +185,6 @@ class ProjectInput {
             projectState.addProject(title, description, people);
             this.clearInputs();
         }
-    }
-    configure() {
-        this.element.addEventListener("submit", this.submitHandler);
     }
 }
 __decorate([
