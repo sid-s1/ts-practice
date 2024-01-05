@@ -1,24 +1,17 @@
 import { Project, ProjectStatus } from '../models/project.js';
-
-// Project state management class
-type Listener<T> = (items: T[]) => void;
-
-class State<T> {
-    protected listeners: Listener<T>[] = [];
-
-    addListener(listenerFn: Listener<T>) {
+class State {
+    constructor() {
+        this.listeners = [];
+    }
+    addListener(listenerFn) {
         this.listeners.push(listenerFn);
     }
 }
-
-export class ProjectState extends State<Project> {
-    private projects: Project[] = [];
-    private static instance: ProjectState;
-
-    private constructor() {
+export class ProjectState extends State {
+    constructor() {
         super();
+        this.projects = [];
     }
-
     static getInstance() {
         if (this.instance) {
             return this.instance;
@@ -26,26 +19,22 @@ export class ProjectState extends State<Project> {
         this.instance = new ProjectState();
         return this.instance;
     }
-
-    addProject(title: string, description: string, numOfPeople: number) {
-        const newProject = new Project(Math.random().toString(),title,description,numOfPeople,ProjectStatus.Active);
+    addProject(title, description, numOfPeople) {
+        const newProject = new Project(Math.random().toString(), title, description, numOfPeople, ProjectStatus.Active);
         this.projects.push(newProject);
         this.updateListeners();
     }
-
-    moveProject(projectId: string, newStatus: ProjectStatus) {
+    moveProject(projectId, newStatus) {
         const project = this.projects.find(prj => prj.id === projectId);
         if (project && project.status !== newStatus) {
             project.status = newStatus;
             this.updateListeners();
         }
     }
-
-    private updateListeners() {
+    updateListeners() {
         for (const listenerFn of this.listeners) {
             listenerFn(this.projects.slice()); // to only return a copy of that array and not the original array
         }
     }
 }
-
 export const projectState = ProjectState.getInstance();
