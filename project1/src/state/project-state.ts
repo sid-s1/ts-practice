@@ -48,4 +48,4 @@ export class ProjectState extends State<Project> {
     }
 }
 
-export const projectState = ProjectState.getInstance();
+export const projectState = ProjectState.getInstance(); // only runs ONCE, as soon as it is imported by any other file; after that, if some other file imports it again, it will NOT get created again and will use the initially created instance
